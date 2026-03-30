@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gia Đình 2828 — Hành Trình Kỳ Thú Thám Hiểm Miền Trung</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap');
+
+  :root {
+    --deep: #0c2d48;
+    --ocean: #145da0;
+    --sky: #b1d4e0;
+    --foam: #e8f4f8;
+    --sand: #f5e6c8;
+    --coral: #ff6b6b;
+    --sun: #ffd93d;
+    --mint: #4ecdc4;
+    --palm: #2d8f4e;
+    --shell: #e8a87c;
+    --night: #0a1628;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Quicksand',sans-serif; background:var(--foam); color:#333; overflow-x:hidden; }
+
+  /* WAVE SVG helpers */
+  .wave-divider { width:100%; line-height:0; overflow:hidden; }
+  .wave-divider svg { display:block; width:100%; height:60px; }
+
+  /* floating decorations */
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  @keyframes sway { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+  .float { animation: float 3s ease-in-out infinite; }
+  .sway { animation: sway 4s ease-in-out infinite; }
+  .float-delay { animation: float 3.5s ease-in-out infinite 0.5s; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: linear-gradient(180deg, var(--deep) 0%, var(--ocean) 40%, #2389da 70%, var(--sky) 100%);
+    color:#fff; text-align:center; padding:50px 20px 30px; position:relative; overflow:hidden;
+  }
+  /* Animated clouds */
+  .hero::after {
+    content:''; position:absolute; top:20px; left:-100px; width:200px; height:80px;
+    background:rgba(255,255,255,0.08); border-radius:50%;
+    animation: drift 20s linear infinite;
+  }
+  @keyframes drift { 0%{left:-200px} 100%{left:110%} }
+
+  .hero-deco { font-size:40px; margin-bottom:10px; }
+  .hero-badge {
+    display:inline-block; background:rgba(255,255,255,0.15); backdrop-filter:blur(8px);
+    border-radius:50px; padding:7px 22px; font-size:12px; font-weight:700;
+    letter-spacing:2px; text-transform:uppercase; margin-bottom:12px;
+    border:1px solid rgba(255,255,255,0.2);
+  }
+  .hero h1 {
+    font-family:'Baloo 2',cursive; font-size:clamp(1.7rem,5vw,3rem);
+    font-weight:800; line-height:1.15; margin-bottom:4px;
+    text-shadow:2px 4px 12px rgba(0,0,0,0.3);
+  }
+  .hero .subtitle { font-size:clamp(0.9rem,2.5vw,1.15rem); font-weight:500; opacity:.9; margin-bottom:12px; }
+
+  .hero-intro {
+    max-width:620px; margin:14px auto 20px; font-size:13.5px; line-height:1.75;
+    opacity:.92; text-align:left; background:rgba(0,0,0,0.15); border-radius:20px;
+    padding:18px 22px; border:1px solid rgba(255,255,255,0.1);
+  }
+
+  .hero-stats { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:14px; }
+  .stat-pill {
+    background:rgba(255,255,255,0.18); backdrop-filter:blur(6px);
+    border-radius:50px; padding:8px 16px; font-weight:700; font-size:12px;
+    display:flex; align-items:center; gap:5px;
+    border:1px solid rgba(255,255,255,0.15);
+  }
+
+  /* ===== CREW ===== */
+  .crew { max-width:820px; margin:-10px auto 30px; padding:0 16px; position:relative; z-index:2; }
+  .card {
+    background:#fff; border-radius:24px; padding:26px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.08);
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  .card h2 { font-family:'Baloo 2',cursive; font-size:1.4rem; color:var(--ocean); margin-bottom:14px; text-align:center; }
+  .crew-grid { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+  .member { text-align:center; width:120px; }
+  .member .avatar {
+    width:72px; height:72px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:30px; margin:0 auto 6px;
+    box-shadow:0 4px 16px rgba(0,0,0,0.12);
+    overflow:hidden;
+  }
+  .member .avatar img { width:100%; height:100%; object-fit:cover; }
+  .member .name { font-weight:700; font-size:13px; }
+  .member .role { font-size:11px; color:#888; margin-top:1px; }
+
+  /* ===== SECTION ===== */
+  .sec-title {
+    font-family:'Baloo 2',cursive; font-size:1.7rem;
+    text-align:center; color:var(--deep); margin-bottom:22px;
+  }
+  .sec-subtitle { text-align:center; font-size:13px; color:#888; margin-top:-16px; margin-bottom:22px; }
+
+  /* ===== MAP ===== */
+  .map-section { max-width:820px; margin:0 auto 30px; padding:0 16px; }
+  .map-frame { border-radius:24px; overflow:hidden; box-shadow:0 6px 24px rgba(0,0,0,0.1); height:380px; border:3px solid #fff; }
+  #minimap { height:100%; width:100%; }
+  .custom-label { background:none; border:none; font-size:13px; font-weight:700; color:#2d3436; text-shadow:1px 1px 2px #fff,-1px -1px 2px #fff; white-space:nowrap; }
+
+  /* ===== TIMELINE ===== */
+  .timeline { max-width:820px; margin:0 auto; padding:0 16px 30px; }
+  .day-card {
+    background:#fff; border-radius:24px; margin-bottom:18px;
+    overflow:hidden; box-shadow:0 4px 18px rgba(0,0,0,0.05);
+    border:1px solid rgba(0,0,0,0.04);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .day-card:hover { transform:translateY(-3px); box-shadow:0 8px 28px rgba(0,0,0,0.1); }
+  .day-header { padding:16px 20px; color:#fff; display:flex; align-items:center; gap:12px; }
+  .day-num { font-family:'Baloo 2',cursive; font-size:2.2rem; font-weight:800; line-height:1; opacity:.85; }
+  .day-title-block h3 { font-family:'Baloo 2',cursive; font-size:1.15rem; }
+  .day-title-block .date { font-size:11px; opacity:.85; }
+  .day-body { padding:16px 20px; }
+  .day-route { display:flex; align-items:center; gap:5px; font-size:12px; font-weight:600; color:#666; margin-bottom:8px; flex-wrap:wrap; }
+  .day-route .arrow { color:#ccc; }
+  .highlights { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+  .highlight {
+    display:inline-flex; align-items:center; gap:4px;
+    background:linear-gradient(135deg, #e8f4f8, #f0f7ff); border-radius:50px; padding:4px 11px;
+    font-size:11px; font-weight:600; color:var(--ocean);
+    border:1px solid rgba(20,93,160,0.1);
+  }
+  .day-details { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px; }
+  .detail-item { background:#f8fafb; border-radius:12px; padding:10px 13px; border:1px solid #eef2f5; }
+  .detail-item .label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:#999; margin-bottom:2px; }
+  .detail-item .value { font-size:12.5px; font-weight:600; color:#333; line-height:1.4; }
+  .hotel-tag {
+    display:inline-flex; align-items:center; gap:3px;
+    background:linear-gradient(135deg,var(--sun),#ffb347); color:#333;
+    font-size:10px; font-weight:700; padding:3px 9px; border-radius:50px; margin-top:4px;
+  }
+
+  /* Photo gallery */
+  .photo-gallery { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; margin-top:12px; }
+  .photo-slot {
+    aspect-ratio:4/3; border-radius:14px; overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+  }
+  .photo-slot img { width:100%; height:100%; object-fit:cover; transition:transform .3s; }
+  .photo-slot:hover img { transform:scale(1.06); }
+
+  /* ===== FOOD ===== */
+  .food-section { max-width:820px; margin:0 auto 30px; padding:0 16px; }
+  .food-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
+  .food-card {
+    background:#fff; border-radius:18px; overflow:hidden;
+    box-shadow:0 3px 14px rgba(0,0,0,0.05); transition:transform .2s;
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  .food-card:hover { transform:translateY(-2px); }
+  .food-photo { aspect-ratio:3/2; overflow:hidden; position:relative; }
+  .food-photo img { width:100%; height:100%; object-fit:cover; transition:transform .3s; }
+  .food-card:hover .food-photo img { transform:scale(1.05); }
+  .food-info { padding:11px 13px; }
+  .food-info .f-name { font-family:'Baloo 2',cursive; font-size:.95rem; color:var(--deep); }
+  .food-info .f-where { font-size:10px; color:var(--ocean); font-weight:600; margin:1px 0; }
+  .food-info .f-desc { font-size:11px; color:#777; line-height:1.4; }
+
+  /* ===== TOP 10 ===== */
+  .top10 { max-width:820px; margin:0 auto 30px; padding:0 16px; }
+  .top10-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; }
+  .top10-item {
+    background:#fff; border-radius:16px; padding:14px;
+    display:flex; align-items:flex-start; gap:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.04); border:1px solid rgba(0,0,0,0.04);
+    transition:transform .15s;
+  }
+  .top10-item:hover { transform:translateX(4px); }
+  .top10-num { font-family:'Baloo 2',cursive; font-size:1.6rem; font-weight:800; line-height:1; min-width:32px; text-align:center; }
+  .top10-text .t-name { font-weight:700; font-size:12.5px; color:#333; }
+  .top10-text .t-where { font-size:10px; color:#888; }
+
+  /* ===== HOTELS ===== */
+  .hotels { max-width:820px; margin:0 auto 30px; padding:0 16px; }
+  .hotel-feature {
+    background:#fff; border-radius:24px; margin-bottom:18px;
+    overflow:hidden; box-shadow:0 4px 18px rgba(0,0,0,0.06);
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  .hf-header { padding:18px 20px 12px; }
+  .hf-header .h-name { font-family:'Baloo 2',cursive; color:var(--deep); }
+  .hf-header .h-stars { color:var(--sun); font-size:14px; margin:2px 0; }
+  .hf-header .h-loc { font-size:11px; color:#888; }
+  .hf-header .h-nights { color:#666; margin-top:3px; }
+  .hf-gallery { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; padding:0 4px 4px; }
+  .hf-img { aspect-ratio:4/3; overflow:hidden; border-radius:8px; }
+  .hf-img img { width:100%; height:100%; object-fit:cover; transition:transform .3s; }
+  .hf-img:hover img { transform:scale(1.06); }
+  @media(max-width:600px){ .hf-gallery{grid-template-columns:repeat(2,1fr);} }
+
+  /* ===== BUDGET ===== */
+  .budget { max-width:820px; margin:0 auto 30px; padding:0 16px; }
+  .budget-card {
+    background:linear-gradient(135deg,var(--deep),#1a3a5c);
+    border-radius:24px; padding:26px; color:#fff;
+  }
+  .budget-card h2 { font-family:'Baloo 2',cursive; font-size:1.35rem; margin-bottom:16px; text-align:center; }
+  .budget-bar-label { display:flex; justify-content:space-between; font-size:11px; font-weight:600; margin-bottom:4px; opacity:.8; }
+  .budget-bar { height:12px; background:rgba(255,255,255,.1); border-radius:50px; overflow:hidden; margin-bottom:18px; }
+  .budget-bar-fill { height:100%; border-radius:50px; background:linear-gradient(90deg,var(--mint),var(--sun)); }
+  .budget-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .budget-item { text-align:center; background:rgba(255,255,255,.06); border-radius:14px; padding:12px 6px; }
+  .budget-item .emoji { font-size:20px; }
+  .budget-item .amount { font-family:'Baloo 2',cursive; font-size:.95rem; font-weight:700; }
+  .budget-item .cat { font-size:10px; opacity:.65; }
+
+  /* ===== CHECKLIST ===== */
+  .checklist { max-width:820px; margin:0 auto 30px; padding:0 16px; }
+  .check-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
+  .check-group h4 { font-size:11px; font-weight:700; color:var(--ocean); margin-bottom:5px; text-transform:uppercase; letter-spacing:.5px; }
+  .check-group ul { list-style:none; padding:0; }
+  .check-group li { font-size:11.5px; padding:2px 0; color:#555; }
+  .check-group li::before { content:'☐ '; color:#bbb; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background:linear-gradient(180deg,var(--deep),var(--night));
+    color:rgba(255,255,255,.5); text-align:center; padding:30px 20px; font-size:12px;
+    position:relative;
+  }
+  .footer .big { font-family:'Baloo 2',cursive; font-size:1.15rem; color:#fff; margin-bottom:6px; }
+  .footer-deco { font-size:28px; margin-bottom:10px; letter-spacing:6px; }
+
+  /* Day color themes */
+  .bg-night   { background:linear-gradient(135deg,#0c2d48,#2e4057); }
+  .bg-cave    { background:linear-gradient(135deg,#0a3d62,#1e8449); }
+  .bg-jungle  { background:linear-gradient(135deg,#2d8f4e,#58d68d); }
+  .bg-road    { background:linear-gradient(135deg,#6c5ce7,#a29bfe); }
+  .bg-culture { background:linear-gradient(135deg,#e17055,#fdcb6e); }
+  .bg-beach   { background:linear-gradient(135deg,#145da0,#74b9ff); }
+  .bg-home    { background:linear-gradient(135deg,var(--coral),#ff9ff3); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-deco float">🐚 🌊 🐠 🌴 🦀</div>
+  <div class="hero-badge">Gia Đình 2828 trân trọng giới thiệu</div>
+  <h1>🚗 Hành Trình Kỳ Thú<br>Thám Hiểm Miền Trung!</h1>
+  <p class="subtitle">🦇 Hang động kỳ bí · 🏯 Cố đô huyền bí · 🏖️ Biển xanh bất tận</p>
+  <div class="hero-intro">
+    Có một gia đình nhỏ ở Hà Nội, vào một tối thứ Năm, lặng lẽ nổ máy chiếc GLE rồi... biến mất khỏi thành phố.
+    Họ đi đâu? Đi tìm thạch nhũ triệu năm trong lòng núi Phong Nha. Đi nghe sông Hương kể chuyện cố đô.
+    Đi để Vy — cô công chúa 4 tuổi — lần đầu thấy biển mênh mông ở Thiên Cầm.
+    Đi để bố Hoàng được nghỉ mắt, bà Hoa được ngồi vườn Huế uống trà, Lâm được chèo kayak giữa rừng xanh.
+    1.400 cây số. 7 ngày. 4 khách sạn mỗi nơi một phong cách. Và vô vàn kỷ niệm đang chờ được tạo ra.
+    <strong>Đây không phải chuyến du lịch. Đây là cuộc phiêu lưu.</strong> 🚀
+  </div>
+  <div class="hero-stats">
+    <div class="stat-pill">📅 7 ngày 6 đêm</div>
+    <div class="stat-pill">🗺️ 1.400 km</div>
+    <div class="stat-pill">👨‍👩‍👧‍👦 5 thành viên</div>
+    <div class="stat-pill">🏨 4 khách sạn</div>
+    <div class="stat-pill">🔋 2 ngày nghỉ lái</div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,30 C200,60 400,0 600,30 C800,60 1000,0 1200,30 L1200,60 L0,60Z" fill="#e8f4f8"/>
+    <path d="M0,40 C200,55 400,20 600,40 C800,60 1000,20 1200,40 L1200,60 L0,60Z" fill="#e8f4f8" opacity="0.5"/>
+  </svg>
+</div>
+
+<!-- BIỆT ĐỘI -->
+<section class="crew">
+  <div class="card">
+    <h2>🐚 Thành Viên Gia Đình 2828</h2>
+    <div class="crew-grid">
+      <div class="member">
+        <div class="avatar"><img src="avatars/hoang.png" alt="Bố Hoàng"></div>
+        <div class="name">Bố Hoàng</div>
+        <div class="role">⚓ Thuyền trưởng · 37t</div>
+      </div>
+      <div class="member">
+        <div class="avatar"><img src="avatars/huyen.png" alt="Mẹ Huyền"></div>
+        <div class="name">Mẹ Huyền</div>
+        <div class="role">🧭 Hoa tiêu phụ</div>
+      </div>
+      <div class="member">
+        <div class="avatar"><img src="avatars/lam.png" alt="Lâm"></div>
+        <div class="name">Lâm</div>
+        <div class="role">🔭 Thám hiểm gia · 10t</div>
+      </div>
+      <div class="member">
+        <div class="avatar"><img src="avatars/vy.png" alt="Vy"></div>
+        <div class="name">Vy</div>
+        <div class="role">👑 Công chúa nhỏ · 4t</div>
+      </div>
+      <div class="member">
+        <div class="avatar" style="background:linear-gradient(135deg,#dfe6e9,#b2bec3);font-size:30px;">👵</div>
+        <div class="name">Bà Hoa</div>
+        <div class="role">🍵 Cố vấn trưởng</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BẢN ĐỒ -->
+<section class="map-section">
+  <h2 class="sec-title">🗺️ Bản Đồ Phiêu Lưu</h2>
+  <p class="sec-subtitle">Đường xanh = chiều đi · Đường cam = chiều về</p>
+  <div class="map-frame"><div id="minimap"></div></div>
+</section>
+
+<!-- NHẬT KÝ -->
+<section class="timeline">
+  <h2 class="sec-title">🗓️ Nhật Ký Hành Trình</h2>
+
+  <!-- ĐÊM 0 -->
+  <div class="day-card">
+    <div class="day-header bg-night">
+      <div class="day-num">🌙</div>
+      <div class="day-title-block"><h3>Xuất Phát! Lên Đường Thôi!</h3><div class="date">Tối thứ 5, 24/4 · 19:30</div></div>
+    </div>
+    <div class="day-body">
+      <div class="day-route"><span>🏠 Hà Nội</span><span class="arrow">→</span><span>🌃 Vinh</span><span style="color:#999;font-size:11px">· 300km · 4,5h</span></div>
+      <div class="highlights">
+        <span class="highlight">🌙 Lái đêm, cao tốc quen</span>
+        <span class="highlight">😴 Ngủ bù tại Sheraton 5⭐</span>
+        <span class="highlight">👧 Vy mặc đồ ngủ sẵn</span>
+      </div>
+      <div class="day-details">
+        <div class="detail-item"><div class="label">Kế hoạch</div><div class="value">19:30 xuất phát, ~00:00 đến Vinh. Nghỉ ngay!</div></div>
+        <div class="detail-item"><div class="label">🏨 Ngủ tại</div><div class="value">Sheraton Vinh</div><div class="hotel-tag">⭐ 5 sao quốc tế</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGÀY 1 -->
+  <div class="day-card">
+    <div class="day-header bg-cave">
+      <div class="day-num">1</div>
+      <div class="day-title-block"><h3>🦇 Vào Hang! Động Phong Nha Kỳ Bí</h3><div class="date">Thứ 6, 25/4</div></div>
+    </div>
+    <div class="day-body">
+      <div class="day-route"><span>🌃 Vinh</span><span class="arrow">→</span><span>🦇 Phong Nha</span><span style="color:#999;font-size:11px">· 210km · 3,5h</span></div>
+      <div class="highlights">
+        <span class="highlight">🍜 Cháo lươn Vinh</span>
+        <span class="highlight">🛶 Đi thuyền vào động</span>
+        <span class="highlight">🦇 UNESCO Phong Nha</span>
+      </div>
+      <div class="day-details">
+        <div class="detail-item"><div class="label">🌅 Sáng</div><div class="value">Ngủ bù + brunch cháo lươn Vinh — đặc sản phải thử!</div></div>
+        <div class="detail-item"><div class="label">🌄 Chiều</div><div class="value">Đi thuyền vào Động Phong Nha — thạch nhũ triệu năm, mát lạnh, huyền ảo!</div></div>
+        <div class="detail-item"><div class="label">🏨 Ngủ tại</div><div class="value">Blue Diamond Retreat</div><div class="hotel-tag">🌿 Bungalow rừng ven sông</div></div>
+      </div>
+      <div class="photo-gallery">
+        <div class="photo-slot"><img src="https://phongnhadiscovery.com/sites/default/files/ben-thuyen-song-son-1.jpg" alt="Sông Son"></div>
+        <div class="photo-slot"><img src="https://tourphongnha.vn/wp-content/uploads/2024/12/466839409_8143194795786713_6986669389477951697_n.jpg" alt="Động Phong Nha"></div>
+        <div class="photo-slot"><img src="https://static.vinwonders.com/production/dac-san-chao-luon-nghe-an.jpg" alt="Cháo lươn Vinh"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGÀY 2 -->
+  <div class="day-card">
+    <div class="day-header bg-jungle">
+      <div class="day-num">2</div>
+      <div class="day-title-block"><h3>💧 Suối Moọc & Ngày Rừng Xanh</h3><div class="date">Thứ 7, 26/4 · 🔋 Không lái xe!</div></div>
+    </div>
+    <div class="day-body">
+      <div class="highlights">
+        <span class="highlight">💧 Suối Moọc nước trong</span>
+        <span class="highlight">🛶 Kayak trên sông</span>
+        <span class="highlight">🌟 Ngắm sao đêm</span>
+        <span class="highlight">🔋 Bố Hoàng sạc pin!</span>
+      </div>
+      <div class="day-details">
+        <div class="detail-item"><div class="label">🌅 Sáng</div><div class="value">Suối Moọc — tắm suối, chơi nước, Vy sẽ mê!</div></div>
+        <div class="detail-item"><div class="label">🌄 Chiều</div><div class="value">Kayak, đạp xe làng quê, hoặc nằm võng đọc sách</div></div>
+        <div class="detail-item"><div class="label">🌙 Tối</div><div class="value">Ngắm sao đêm — Phong Nha ít ánh đèn, trời sao rất đẹp!</div></div>
+      </div>
+      <div class="photo-gallery">
+        <div class="photo-slot"><img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/1e/ff/7e/exicited-activities.jpg?w=900&h=500&s=1" alt="Suối Moọc"></div>
+        <div class="photo-slot"><img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2f/5e/21/ba/blue-diamond-retreat.jpg?w=900&h=500&s=1" alt="Blue Diamond"></div>
+        <div class="photo-slot"><img src="https://bluediamondretreat.com/wp-content/uploads/2025/03/jungle_bungalow_16.jpg" alt="Bungalow rừng"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGÀY 3 -->
+  <div class="day-card">
+    <div class="day-header bg-road">
+      <div class="day-num">3</div>
+      <div class="day-title-block"><h3>🏯 Đến Cố Đô! Huế Ơi Huế!</h3><div class="date">Chủ nhật, 27/4</div></div>
+    </div>
+    <div class="day-body">
+      <div class="day-route"><span>🦇 Phong Nha</span><span class="arrow">→</span><span>🏯 Huế</span><span style="color:#999;font-size:11px">· 210km · 3,5h</span></div>
+      <div class="highlights">
+        <span class="highlight">🏙️ Ghé Đồng Hới ăn trưa</span>
+        <span class="highlight">🌅 Hoàng hôn sông Hương</span>
+        <span class="highlight">🌉 Trường Tiền ban đêm</span>
+      </div>
+      <div class="day-details">
+        <div class="detail-item"><div class="label">🍜 Trưa</div><div class="value">Bánh lọc, hải sản Đồng Hới</div></div>
+        <div class="detail-item"><div class="label">🌙 Tối</div><div class="value">Dạo sông Hương + ăn bánh bèo, nem lụi, chè Huế</div></div>
+        <div class="detail-item"><div class="label">🏨 Ngủ tại</div><div class="value">Ancient Hue Garden Houses</div><div class="hotel-tag">🏡 Nhà vườn Huế cổ kính</div></div>
+      </div>
+      <div class="photo-gallery">
+        <div class="photo-slot"><img src="https://bazantravel.com/cdn/medias/uploads/72/72531-hoang-hon-cau-truong-tien-hue-700x366.jpg" alt="Hoàng hôn Trường Tiền"></div>
+        <div class="photo-slot"><img src="https://huesmiletravel.com.vn/images/cau_trang_tien_ve_dem.jpg" alt="Trường Tiền đêm"></div>
+        <div class="photo-slot"><img src="https://pix10.agoda.net/hotelImages/7795250/-1/e6011141aed50a762fd4937aca935664.jpg?ce=0&s=1024x768" alt="Ancient Hue"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGÀY 4 -->
+  <div class="day-card">
+    <div class="day-header bg-culture">
+      <div class="day-num">4</div>
+      <div class="day-title-block"><h3>🏯 Khám Phá Đại Nội & Ăn Sập Huế!</h3><div class="date">Thứ 2, 28/4 · 🔋 Không lái xe!</div></div>
+    </div>
+    <div class="day-body">
+      <div class="highlights">
+        <span class="highlight">🏯 Đại Nội Kinh Thành</span>
+        <span class="highlight">🍜 Bún bò Huế gốc</span>
+        <span class="highlight">🛕 Chùa Thiên Mụ</span>
+        <span class="highlight">👘 Mặc áo dài</span>
+        <span class="highlight">🔋 Sạc pin lần 2!</span>
+      </div>
+      <div class="day-details">
+        <div class="detail-item"><div class="label">🌅 Sáng</div><div class="value">Bún bò Huế + Đại Nội — Lâm sẽ thích khám phá!</div></div>
+        <div class="detail-item"><div class="label">☀️ Trưa</div><div class="value">Cơm hến + nghỉ trưa dài trong nhà vườn cổ</div></div>
+        <div class="detail-item"><div class="label">🌄 Chiều</div><div class="value">Chùa Thiên Mụ hoặc cafe ven sông Hương</div></div>
+        <div class="detail-item"><div class="label">🌙 Tối</div><div class="value">Nem lụi cuốn + chè Huế — bữa cuối ở cố đô!</div></div>
+      </div>
+      <div class="photo-gallery">
+        <div class="photo-slot"><img src="https://www.lagunalangco.com/wp-content/uploads/2025/04/dai-noi-kinh-thanh-hue-4-1024x683.jpg" alt="Đại Nội"></div>
+        <div class="photo-slot"><img src="https://images.vietnamtourism.gov.vn/vn/images/2023/anh_cover_hue.png" alt="Ẩm thực Huế"></div>
+        <div class="photo-slot"><img src="https://upload.wikimedia.org/wikipedia/commons/8/88/ThienMuPagoda.jpg" alt="Chùa Thiên Mụ"></div>
+        <div class="photo-slot"><img src="https://laque.vn/wp-content/uploads/2021/05/quan-nem-lui-ngon-o-hue-9.jpg" alt="Nem lụi"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGÀY 5 -->
+  <div class="day-card">
+    <div class="day-header bg-beach">
+      <div class="day-num">5</div>
+      <div class="day-title-block"><h3>🏖️ Biển Xanh! Thiên Cầm Đẹp Lắm!</h3><div class="date">Thứ 3, 29/4</div></div>
+    </div>
+    <div class="day-body">
+      <div class="day-route"><span>🏯 Huế</span><span class="arrow">→</span><span>🏖️ Thiên Cầm</span><span style="color:#999;font-size:11px">· 230km · 4h</span></div>
+      <div class="highlights">
+        <span class="highlight">🏖️ Tắm biển hoang sơ</span>
+        <span class="highlight">🏰 Xây lâu đài cát</span>
+        <span class="highlight">🦐 Đại tiệc hải sản</span>
+        <span class="highlight">🌅 Hoàng hôn biển</span>
+      </div>
+      <div class="day-details">
+        <div class="detail-item"><div class="label">🌄 Chiều</div><div class="value">TẮM BIỂN! Phần thưởng cho cả nhà! Vy + Lâm xây lâu đài cát! 🏰</div></div>
+        <div class="detail-item"><div class="label">🌙 Tối</div><div class="value">Đại tiệc hải sản ven biển — ghẹ, tôm, mực nướng! 🦐</div></div>
+        <div class="detail-item"><div class="label">🏨 Ngủ tại</div><div class="value">Seabird Thiên Cầm</div><div class="hotel-tag">🏖️ 4 sao sát biển</div></div>
+      </div>
+      <div class="photo-gallery">
+        <div class="photo-slot"><img src="https://thienha68.com/wp-content/uploads/2024/08/bien-thien-cam-ha-tinh-1.jpg" alt="Biển Thiên Cầm"></div>
+        <div class="photo-slot"><img src="https://thienha68.com/wp-content/uploads/2024/08/bien-thien-cam-ha-tinh-3.jpg" alt="Bãi cát"></div>
+        <div class="photo-slot"><img src="https://dulichvietnam.com.vn/vnt_upload/news/01_2024/1_quan_an_ngon_o_bien_thien_cam.jpg" alt="Hải sản"></div>
+        <div class="photo-slot"><img src="https://cdn1.ivivu.com/images/2024/06/17/12/41b3772696be6674f04688422e509726_aztl8s_bcwk4z_.webp" alt="Seabird"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NGÀY 6 -->
+  <div class="day-card">
+    <div class="day-header bg-home">
+      <div class="day-num">6</div>
+      <div class="day-title-block"><h3>🏠 Về Nhà Thôi! Hết Phiêu Lưu Rồi!</h3><div class="date">Thứ 4, 30/4 · Lễ 30/4! 🎉</div></div>
+    </div>
+    <div class="day-body">
+      <div class="day-route"><span>🏖️ Thiên Cầm</span><span class="arrow">→</span><span>🏠 Hà Nội</span><span style="color:#999;font-size:11px">· 370km · 5h</span></div>
+      <div class="highlights">
+        <span class="highlight">🌅 Tản bộ biển sáng</span>
+        <span class="highlight">🏠 Về nhà trước 14:00</span>
+        <span class="highlight">😴 Chiều nghỉ tại nhà</span>
+      </div>
+      <div class="day-details">
+        <div class="detail-item"><div class="label">Kế hoạch</div><div class="value">8:30 xuất phát, 13:30 về đến Hà Nội. Còn cả chiều để nghỉ! 🎉</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+    <path d="M0,20 C300,50 600,0 900,30 C1050,45 1150,15 1200,25 L1200,60 L0,60Z" fill="#fff"/>
+  </svg>
+</div>
+
+<!-- ĐỒ ĂN -->
+<section class="food-section" style="background:#fff;padding-top:20px;padding-bottom:30px;">
+  <h2 class="sec-title">🍜 Đồ Ăn Đáng Thử</h2>
+  <p class="sec-subtitle">Mỗi vùng một hương vị — ăn là nhớ!</p>
+  <div class="food-grid" style="max-width:820px;margin:0 auto;">
+    <div class="food-card">
+      <div class="food-photo"><img src="https://static.vinwonders.com/production/chao-luon-ba-lan-nghe-an.jpg" alt="Cháo lươn"></div>
+      <div class="food-info"><div class="f-name">Cháo Lươn Vinh</div><div class="f-where">📍 Vinh · Ngày 1</div><div class="f-desc">Cháo nóng, lươn giòn, rắc hành phi. Đặc sản xứ Nghệ!</div></div>
+    </div>
+    <div class="food-card">
+      <div class="food-photo"><img src="https://phongnhacave.org/wp-content/uploads/2017/03/9_1.jpg" alt="Phong Nha"></div>
+      <div class="food-info"><div class="f-name">Gà Đồi Nướng</div><div class="f-where">📍 Phong Nha · Ngày 1–2</div><div class="f-desc">Gà thả vườn, thịt chắc, nướng than hoa thơm lừng.</div></div>
+    </div>
+    <div class="food-card">
+      <div class="food-photo"><img src="https://images.vietnamtourism.gov.vn/vn/images/2023/anh_cover_hue.png" alt="Bún bò Huế"></div>
+      <div class="food-info"><div class="f-name">Bún Bò Huế</div><div class="f-where">📍 Huế · Ngày 4</div><div class="f-desc">Nước dùng sả ớt, thịt bò + giò heo. Số 1 cố đô!</div></div>
+    </div>
+    <div class="food-card">
+      <div class="food-photo"><img src="https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=710013245006338" alt="Bánh bèo"></div>
+      <div class="food-info"><div class="f-name">Bánh Bèo · Nậm · Lọc</div><div class="f-where">📍 Huế · Ngày 3–4</div><div class="f-desc">Bộ 3 bánh Huế, nước mắm ngọt. Vy ăn được!</div></div>
+    </div>
+    <div class="food-card">
+      <div class="food-photo"><img src="https://statics.vinpearl.com/nem-lui-hue-1_1631327346.jpg" alt="Nem lụi"></div>
+      <div class="food-info"><div class="f-name">Nem Lụi Cuốn</div><div class="f-where">📍 Huế · Ngày 4</div><div class="f-desc">Nem nướng cuốn rau + bánh tráng, chấm tương.</div></div>
+    </div>
+    <div class="food-card">
+      <div class="food-photo"><img src="https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=710013248339671" alt="Chè Huế"></div>
+      <div class="food-info"><div class="f-name">Chè Huế</div><div class="f-where">📍 Huế · Mỗi tối</div><div class="f-desc">Chè bắp, đậu xanh đánh, hạt sen. Đẹp mắt!</div></div>
+    </div>
+    <div class="food-card">
+      <div class="food-photo"><img src="https://dulichvietnam.com.vn/vnt_upload/news/01_2024/1_quan_an_ngon_o_bien_thien_cam.jpg" alt="Hải sản"></div>
+      <div class="food-info"><div class="f-name">Hải Sản Thiên Cầm</div><div class="f-where">📍 Thiên Cầm · Ngày 5</div><div class="f-desc">Ghẹ hấp, tôm nướng, mực — bữa ngon nhất chuyến!</div></div>
+    </div>
+    <div class="food-card">
+      <div class="food-photo"><img src="https://static.vinwonders.com/production/mon-ngon-chao-luon-nghe-an.jpg" alt="Cơm hến"></div>
+      <div class="food-info"><div class="f-name">Cơm Hến Huế</div><div class="f-where">📍 Huế · Ngày 4</div><div class="f-desc">Cơm nguội + hến + rau sống + mắm ruốc. Lạ mà ngon!</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOP 10 -->
+<section class="top10">
+  <h2 class="sec-title">🌟 Top 10 Trải Nghiệm Không Bỏ Lỡ</h2>
+  <div class="top10-grid">
+    <div class="top10-item"><div class="top10-num" style="color:var(--coral)">1</div><div class="top10-text"><div class="t-name">🛶 Đi thuyền Động Phong Nha</div><div class="t-where">Phong Nha · Ngày 1</div></div></div>
+    <div class="top10-item"><div class="top10-num" style="color:var(--mint)">2</div><div class="top10-text"><div class="t-name">💧 Tắm Suối Moọc</div><div class="t-where">Phong Nha · Ngày 2</div></div></div>
+    <div class="top10-item"><div class="top10-num" style="color:var(--palm)">3</div><div class="top10-text"><div class="t-name">🛶 Kayak + ngắm sao đêm</div><div class="t-where">Blue Diamond · Ngày 2</div></div></div>
+    <div class="top10-item"><div class="top10-num" style="color:var(--ocean)">4</div><div class="top10-text"><div class="t-name">🍜 Bún bò Huế gốc</div><div class="t-where">Huế · Ngày 4</div></div></div>
+    <div class="top10-item"><div class="top10-num" style="color:var(--shell)">5</div><div class="top10-text"><div class="t-name">🏯 Tham quan Đại Nội</div><div class="t-where">Huế · Ngày 4</div></div></div>
+    <div class="top10-item"><div class="top10-num" style="color:#6c5ce7">6</div><div class="top10-text"><div class="t-name">🌅 Hoàng hôn sông Hương</div><div class="t-where">Huế · Ngày 3</div></div></div>
+    <div class="top10-item"><div class="top10-num" style="color:var(--sun)">7</div><div class="top10-text"><div class="t-name">🍵 Chè dưới cầu Trường Tiền</div><div class="t-where">Huế · Ngày 3</div></div></div>
+    <div class="top10-item"><div class="top10-num" style="color:var(--ocean)">8</div><div class="top10-text"><div class="t-name">🏖️ Tắm biển Thiên Cầm</div><div class="t-where">Thiên Cầm · Ngày 5</div></div></div>
+    <div class="top10-item"><div class="top10-num" style="color:var(--coral)">9</div><div class="top10-text"><div class="t-name">🦐 Đại tiệc hải sản ven biển</div><div class="t-where">Thiên Cầm · Ngày 5</div></div></div>
+    <div class="top10-item"><div class="top10-num" style="color:#ff9ff3">10</div><div class="top10-text"><div class="t-name">🍲 Cháo lươn Vinh buổi sáng</div><div class="t-where">Vinh · Ngày 1</div></div></div>
+  </div>
+</section>
+
+<!-- KHÁCH SẠN -->
+<section class="hotels">
+  <h2 class="sec-title">🏨 4 Điểm Dừng Chân</h2>
+  <p class="sec-subtitle">Mỗi đêm một phong cách — từ 5 sao quốc tế đến bungalow rừng!</p>
+
+  <div class="hotel-feature">
+    <div class="hf-header"><div><div class="h-name" style="font-size:1.3rem">🏙️ Sheraton Vinh</div><div class="h-stars">★★★★★</div><div class="h-loc">TP Vinh, Nghệ An · 1 đêm · Check-in khuya</div></div><div class="h-nights" style="font-size:12px">5 sao quốc tế · 36 tầng · Rooftop bar tầng 36 · Bể bơi trong nhà · Spa</div></div>
+    <div class="hf-gallery">
+      <div class="hf-img"><img src="https://travellingforbusiness.co.uk/wp-content/uploads/2025/12/image002-32.jpg" alt="Sheraton"></div>
+      <div class="hf-img"><img src="https://cache.marriott.com/is/image/marriotts7prod/si-viisi-lobby-38679:Classic-Hor?wid=1336&fit=constrain" alt="Lobby"></div>
+      <div class="hf-img"><img src="https://cache.marriott.com/is/image/marriotts7prod/si-viisi-pool-32899:Wide-Hor?wid=1336&fit=constrain" alt="Pool"></div>
+      <div class="hf-img"><img src="https://cache.marriott.com/is/image/marriotts7prod/si-viisi-room-king-15646:Wide-Hor?wid=1336&fit=constrain" alt="Room"></div>
+    </div>
+  </div>
+
+  <div class="hotel-feature">
+    <div class="hf-header"><div><div class="h-name" style="font-size:1.3rem">🌿 Blue Diamond Retreat</div><div class="h-stars">★★★★</div><div class="h-loc">Phong Nha, Quảng Bình · 2 đêm</div></div><div class="h-nights" style="font-size:12px">Eco-retreat · Bungalow rừng · Ven sông xanh · Kayak · Năng lượng mặt trời</div></div>
+    <div class="hf-gallery">
+      <div class="hf-img"><img src="https://oxalisadventure.com/uploads/2023/06/bluediamondcamp8__638230866817316610.jpg" alt="Toàn cảnh"></div>
+      <div class="hf-img"><img src="https://bluediamondretreat.com/wp-content/uploads/2025/03/jungle_bungalow_12.jpg" alt="Bungalow"></div>
+      <div class="hf-img"><img src="https://bluediamondretreat.com/wp-content/uploads/2024/08/du-thuyen-suc-gio.jpg" alt="Thuyền"></div>
+      <div class="hf-img"><img src="https://oxalisadventure.com/uploads/2023/06/bluediamondcamp6__638230866795054131.jpg" alt="Thiên nhiên"></div>
+    </div>
+  </div>
+
+  <div class="hotel-feature">
+    <div class="hf-header"><div><div class="h-name" style="font-size:1.3rem">🏡 Ancient Hue Garden Houses</div><div class="h-stars">★★★★</div><div class="h-loc">Huế, Thừa Thiên Huế · 2 đêm</div></div><div class="h-nights" style="font-size:12px">Nhà vườn Huế cổ kính · Biệt thự Pháp · Bể bơi ngoài trời · Vườn rộng cho trẻ chơi</div></div>
+    <div class="hf-gallery">
+      <div class="hf-img"><img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/d6/a6/0d/overview-of-ancient-hu.jpg?w=500&h=-1&s=1" alt="Tổng thể"></div>
+      <div class="hf-img"><img src="https://cdn.prod.website-files.com/64abcdc20502b3d794f976cf/6847aaaab3fd4b29453ca6d7_pool%20(5)-min.webp" alt="Bể bơi"></div>
+      <div class="hf-img"><img src="https://q-xx.bstatic.com/xdata/images/hotel/max500/761790158.jpg?k=887467ddb387801ca58f5299ca7bbf0f74132bb86857b4f32ed163baa8016350&o=" alt="Phòng"></div>
+      <div class="hf-img"><img src="https://images.trvl-media.com/lodging/38000000/37620000/37617400/37617391/e427dc96.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill" alt="Vườn"></div>
+    </div>
+  </div>
+
+  <div class="hotel-feature">
+    <div class="hf-header"><div><div class="h-name" style="font-size:1.3rem">🏖️ Seabird Thiên Cầm</div><div class="h-stars">★★★★</div><div class="h-loc">Thiên Cầm, Hà Tĩnh · 1 đêm</div></div><div class="h-nights" style="font-size:12px">4 sao sát biển · 160+ phòng · Bể bơi ngoài trời · Nhà hàng hải sản</div></div>
+    <div class="hf-gallery">
+      <div class="hf-img"><img src="https://q-xx.bstatic.com/xdata/images/hotel/max500/441592173.jpg?k=a707fd18ee1b6449cec4d95b9ba1bb422fe843abfa693a4b04379600fc59dd5d&o=" alt="Tổng thể"></div>
+      <div class="hf-img"><img src="https://q-xx.bstatic.com/xdata/images/hotel/max500/555504465.jpg?k=17c038aaa75eb952cd048223ff13ea168bd9a352f6c352f32463623853e276d3&o=" alt="Phòng"></div>
+      <div class="hf-img"><img src="https://cdn1.ivivu.com/images/2024/06/17/12/41b3772696be6674f04688422e509726_aztl8s_bcwk4z_.webp" alt="Bể bơi"></div>
+      <div class="hf-img"><img src="https://images.getaroom-cdn.com/image/upload/s--D1wtvxAb--/c_limit,e_improve,fl_lossy.immutable_cache,h_460,q_auto:good,w_460/v1737491600/08fd4e70f1565e2f5fe8e95afd26e64708002e56?_a=BACAEuEv&atc=e7cd1cfa" alt="View"></div>
+    </div>
+  </div>
+</section>
+
+<!-- NGÂN SÁCH -->
+<section class="budget">
+  <div class="budget-card">
+    <h2>💰 Ngân Sách Phiêu Lưu</h2>
+    <div class="budget-bar-label"><span>Kế hoạch: 33 triệu</span><span>Trần: 40 triệu</span></div>
+    <div class="budget-bar"><div class="budget-bar-fill" style="width:82.5%"></div></div>
+    <div class="budget-grid">
+      <div class="budget-item"><div class="emoji">⛽</div><div class="amount">5,3tr</div><div class="cat">Di chuyển</div></div>
+      <div class="budget-item"><div class="emoji">🏨</div><div class="amount">11,5tr</div><div class="cat">Lưu trú</div></div>
+      <div class="budget-item"><div class="emoji">🍜</div><div class="amount">9,8tr</div><div class="cat">Ăn uống</div></div>
+      <div class="budget-item"><div class="emoji">🎟️</div><div class="amount">1,7tr</div><div class="cat">Tham quan</div></div>
+      <div class="budget-item"><div class="emoji">🛍️</div><div class="amount">1tr</div><div class="cat">Mua sắm</div></div>
+      <div class="budget-item"><div class="emoji">🛟</div><div class="amount">3,7tr</div><div class="cat">Dự phòng</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKLIST -->
+<section class="checklist">
+  <div class="card">
+    <h2 style="color:var(--coral)">✅ Chuẩn Bị Lên Đường!</h2>
+    <div class="check-grid">
+      <div class="check-group"><h4>📋 Giấy tờ</h4><ul><li>CCCD cả nhà</li><li>Bằng lái Hoàng + Huyền</li><li>Giấy tờ xe + bảo hiểm</li><li>Tiền mặt 5–8 triệu</li></ul></div>
+      <div class="check-group"><h4>🏨 Đặt phòng (trước 11/4)</h4><ul><li>Sheraton Vinh (1 đêm)</li><li>Blue Diamond (2 đêm)</li><li>Ancient Hue (2 đêm)</li><li>Seabird Thiên Cầm (1 đêm)</li></ul></div>
+      <div class="check-group"><h4>🧳 Hành lý</h4><ul><li>Quần áo 7 ngày</li><li>Đồ bơi (suối + biển)</li><li>Mũ nón ×5</li><li>Kem chống nắng</li></ul></div>
+      <div class="check-group"><h4>👧 Cho Vy</h4><ul><li>Snack + sữa hộp</li><li>Đồ chơi / iPad</li><li>Phao bơi nhỏ</li><li>Đồ ngủ mặc sẵn lên xe</li></ul></div>
+      <div class="check-group"><h4>🚗 Xe Mercedes</h4><ul><li>Kiểm tra lốp, phanh, dầu</li><li>Đổ đầy xăng</li><li>Hotline cứu hộ Mercedes</li><li>Pin dự phòng + sạc xe</li></ul></div>
+      <div class="check-group"><h4>💊 Y tế</h4><ul><li>Thuốc hạ sốt</li><li>Thuốc say xe (Vy)</li><li>Dầu gió, băng cá nhân</li><li>Thuốc chống muỗi</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-deco">🐚 🌊 🐠 🌴 🦀 🐚</div>
+  <div class="big">⚓ Gia Đình 2828 — Sẵn Sàng Lên Đường! 🚀</div>
+  <p>Hành trình 1.400km · 7 ngày · 3 trải nghiệm · Vô vàn kỷ niệm</p>
+  <p style="margin-top:8px;opacity:.35">Lập kế hoạch bởi Claude · 03/2026</p>
+</footer>
+
+<!-- MAP -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const pts=[
+  {name:"Hà Nội",lat:21.0285,lng:105.8542,label:"🏠 Xuất phát T5 19:30",color:"#e84393"},
+  {name:"Vinh",lat:18.679,lng:105.6813,label:"🌙 Đêm 1: Sheraton 5★",color:"#fdcb6e"},
+  {name:"Phong Nha",lat:17.59,lng:106.2833,label:"🦇 Đêm 2–3: Blue Diamond",color:"#00cec9"},
+  {name:"Huế",lat:16.4637,lng:107.5909,label:"🏯 Đêm 4–5: Ancient Hue",color:"#6c5ce7"},
+  {name:"Thiên Cầm",lat:18.265,lng:106.05,label:"🏖️ Đêm 6: Seabird 4★",color:"#0984e3"},
+];
+const map=L.map('minimap',{scrollWheelZoom:false}).setView([18.5,106],7);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
+L.polyline(pts.slice(0,4).map(p=>[p.lat,p.lng]),{color:'#00b894',weight:4,dashArray:'8,6'}).addTo(map);
+L.polyline([[16.4637,107.5909],[18.265,106.05],[21.0285,105.8542]],{color:'#e17055',weight:4,dashArray:'8,6'}).addTo(map);
+pts.forEach(p=>{
+  L.circleMarker([p.lat,p.lng],{radius:10,fillColor:p.color,color:'#fff',weight:2,fillOpacity:.9}).addTo(map).bindPopup(`<b>${p.name}</b><br>${p.label}`);
+  L.marker([p.lat,p.lng],{icon:L.divIcon({className:'custom-label',html:p.name,iconAnchor:[-14,12]})}).addTo(map);
+});
+map.fitBounds(pts.slice(0,4).map(p=>[p.lat,p.lng]),{padding:[30,30]});
+</script>
+</body>
+</html>
